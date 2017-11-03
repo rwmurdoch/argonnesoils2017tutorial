@@ -2,6 +2,10 @@
 # Shell lesson
 [Edamame shell lesson](2015-06-22-introduction_to_the_shell.md)
 
+# NCBI lesson
+[Getting data out of NCBI](trimble-ncbi-lesson.rst)
+[Adina's NCBI lesson](http://blast-tutorial.readthedocs.io/en/latest/ncbi/index.html)
+
 # Amazon EC2  -- servers for rent
 - [What is Cloud Computing and why is it useful?](https://2014-argonne-soils-automation-workshop.readthedocs.io/en/latest/_static/argonne-cloud-computing.pptx.pdf)
 
@@ -9,7 +13,7 @@
 
 # More resources
 * [Argonne soils automation workshop 2014](https://2014-argonne-soils-automation-workshop.readthedocs.io/en/latest/) This workshop had a more expansive day-and-a-half workshop in 2014.
-* [Software Carpentry reference page] (http://swcarpentry.github.io/shell-novice/reference.html)
+* [Software Carpentry reference page](http://swcarpentry.github.io/shell-novice/reference.html)
 * Software Carpentry tutorial - [The Unix shell](http://software-carpentry.org/v4/shell/index.html)
 * The shell handout - [Command Reference](http://files.fosswire.com/2007/08/fwunixref.pdf)
 * [explainshell.com](http://explainshell.com)
