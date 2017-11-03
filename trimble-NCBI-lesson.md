@@ -8,7 +8,7 @@ NCBI maintains databases for many different types of biological data.  You may b
 * GEO  (Genome expression omnibus -- database for expression datasets)
 * Pubmed (bibliographic database of biology-relevant abstracts)
 
-For each of these databases, NCBI provides a *search engine*, *data downloads*, and  *related records in other databases*, as well as other funcitonality.
+For each of these databases, NCBI provides a *search engine*, *data downloads*, and  *related records in other databases*, as well as other functionality.
 
 Everything that you can get from NCBI's websites you can also get via a program. If you've ever spent thirty minutes looking at search results on NCBI's
 website you might be longing for a faster way to get lists of relevant datasets and download them.
@@ -29,7 +29,7 @@ We could of course do this by hand.  Via the web, we could go to NCBI's [Entrez]
 
 By FTP, we could go to NCBI's [FTP site](ftp://ftp.ncbi.nlm.nih.gov/refseq/), find each genome, and download it manually 
 
-We will show you how to find and download the genoems with the NCBI Web Services API.
+We will show you how to find and download the genomes with the NCBI Web Services API.
 
 ### What is an API and how does it relate to NCBI?
 
@@ -38,7 +38,7 @@ API stands for *application programming interface*; you can consult [stackoverfl
 The NCBI toolkit is called *Entrez Programming Utilities* or *eutils* for short.  It is described at length in a series of e-books 
 [Entrez Programming Utilities Help](http://www.ncbi.nlm.nih.gov/books/NBK25501/), [E-utilities Quick Start](http://www.ncbi.nlm.nih.gov/books/NBK25500/), and [The E-utilities in-depth: parameters, syntax, and more](http://www.ncbi.nlm.nih.gov/books/NBK25499/). 
 
-To do this, you're going to be using one tool in *eutils*, called *efetch*.  There is a whole chapter devoted to [efetch](http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch) -- When Adina first started doing this kind of work, this documentation always broke her heart.   From detailed, highly funcitonal documentation it is very difficult to learn what the API can do.  It seems that a handful of examples explain much better than volumes of documentation. 
+To do this, you're going to be using one tool in *eutils*, called *efetch*.  There is a whole chapter devoted to [efetch](http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch) -- When Adina first started doing this kind of work, this documentation always broke her heart.   From detailed, highly functional documentation it is very difficult to learn what the API can do.  It seems that a handful of examples explain much better than volumes of documentation. 
 
 The NCBI functionality is provided by these methods:
 
@@ -56,7 +56,7 @@ with unusual GC content) in fasta format::
 
 Take a look at it.  You can see the genbank formatted genome [here](http://www.ncbi.nlm.nih.gov/nuccore/CP001226.1).
 
-Other data formats of the same data are availabile.  The following URL will give you a genbank file::
+Other data formats of the same data are available.  The following URL will give you a genbank file::
 
    http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP001226.1&rettype=gb
 
@@ -67,9 +67,9 @@ Do you notice the difference in these two commands?  Let's breakdown the command
 #.  `id=CP000962`  This fields specifies the ID of the genome you want.
 #.  `rettype=gb`  This field specifies the format of data to be returned.  You'll note that this changed between the two URLs above.  In the first, we asked for only the FASTA sequence, while in the second, we asked for the Genbank file.  What you can put here depends on which database you use, and the documentation is elusive but useful: 
 
-    valid alues of retmode and rettype(http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly)
+    valid values of retmode and rettype(http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly)
 
-NCBI's database objects can be updated, and when they are, the version number is incremented: see the discussion [here](http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/Format/exercises/qa_accession_vs_gi.html).  Specifiying the version number of the sequence can assure repeatability if osbselescence.
+NCBI's database objects can be updated, and when they are, the version number is incremented: see the discussion [here](http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/Format/exercises/qa_accession_vs_gi.html).  Specifying the version number of the sequence can assure repeatability if obsolescence.
 
 [Table of retmode and rettype fields](http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly)
 [Table of NCBI database ids](http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly)
@@ -146,10 +146,12 @@ There are several options; the first one is ElementTree, and it is sufficient fo
     root = ET.fromstring(result.text)
 
 
-So first we call ET.fromstring to parse the XML--load it into a data structure that we can access with ET's subroutines (called methods)::
+So first we call ET.fromstring to parse the XML--load it into a data structure that we can access with ET's subroutines (called methods):
+
     root = ET.fromstring(result.text)
 
-The canonical approach is to iterate over all of the child nodes of the "root" in the XML data structure::
+The canonical approach is to iterate over all of the child nodes of the "root" in the XML data structure:
+
     for child in root.getchildren()
         print child
 
@@ -245,42 +247,44 @@ So now docsum is defined -- as the last docsum in the XML--so I can try iteratin
 This shows us what we saw in the browser--the field names are in the Name element of the attributes and the data is in the .text attribute.
 Let us turn this into a dict:
 
-   itemhash = {}
-   for item in docsum.iter("Item"):
+    itemhash = {}
+    for item in docsum.iter("Item"):
        itemhash[item.attrib["Name"]] = item.text
 
 And now we have a hash that contains all the for one of the DocSums.
 To get all the docsums, let us create a hash of hashes::
 
-   summaryhash = {}
-   for docsum in sumroot.iter("DocSum"):
-       docsumid = docsum.iter("Id").next().text
-       summaryhash[docsumid] ={}
-       for item in docsum.iter("Item"):
-           if item.text != None:
-               summaryhash[docsumid][item.attrib["Name"]] = item.text
+    summaryhash = {}
+    for docsum in sumroot.iter("DocSum"):
+        docsumid = docsum.iter("Id").next().text
+        summaryhash[docsumid] ={}
+        for item in tocsin.iter("Item"):
+            if item.text != None:
+                summaryhash[docsumid][item.attrib["Name"]] = item.text
 
-Now all the data is in a hash of hashes.  Let us construct a list of fields::
-   keylist = list(summaryhash[docsumid].keys())
-   print "Id\t" + "\t".join(keylist)
+Now all the data is in a hash of hashes.  Let us construct a list of fields:
 
-That shows me the field names, and a loop through the docsumids gives me the entries::
-   for docsumid in summaryhash.keys():
-       fields = [summaryhash[docsumid][k] for k in keylist] 
-       print docsumid + "\t" + "\t".join(fields)
+    keylist = list(summaryhash[docsumid].keys())
+    print "Id\t" + "\t".join(keylist)
+
+That shows me the field names, and a loop through the docsumids gives me the entries:
+
+    for docsumid in summaryhash.keys():
+        fields = [summaryhash[docsumid][k] for k in keylist] 
+        print docsumid + "\t" + "\t".join(fields)
 
 Whew.  Actually, wait a sec.. all the fields don't seem to be there.  Right. I constructed
 keylist just using the fields that were in the last docsum.
 
-   keylist = set()
-   for docsumid in summaryhash.keys():
+    keylist = set()
+    for docsumid in summaryhash.keys():
         keylist.add(summaryhash[docsumid].keys())
    
 
 Now we have accession numbers, time to download the datasets.
 
 
-##Comment on Genbank files
+## Comment on Genbank files
 
 Genbank files have a special structure to them.  You can look at it and figure it out for the most part, or read about it in detail [here](http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html).  To find out if your downloaded Genbank files contain 16S rRNA genes, I like to run the following command::
 
