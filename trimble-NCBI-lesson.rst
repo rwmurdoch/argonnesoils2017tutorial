@@ -1,6 +1,4 @@
-================================================
-So you want to get some sequencing data out of NCBI?
-================================================
+# So you want to get some sequencing data out of NCBI?
 
 Requirements:  You'll need to start an Ubuntu EC2 instance and have root access.  The first part of this tutorial will be on your local computer and then we'll move onto the EC2 instance.  Also, this tutorial assumes that someone has talked to you about paths and you know how to change directories and execute a program on a file.  If you get an error that a program or file does not exist, make sure you are in the right path.
 
@@ -15,8 +13,7 @@ For each of these databases, NCBI provides a *search engine*, *data downloads*, 
 Everything that you can get from NCBI's websites you can also get via a program. If you've ever spent thirty minutes looking at search results on NCBI's
 website you might be longing for a faster way to get lists of relevant datasets and download them.
 
-The challenge
--------------
+## The challenge
 My colleague is studying snakes, and for comparative genomic reasons wants all the available snake genomes. 
 
 To do this we will need to
@@ -24,29 +21,31 @@ To do this we will need to
 2.  Get enough details about each item on the list to decide whether it's relevant, and
 3.  Download the genomes already
 
-We could of course do this by hand.  Via the web, we could go to NCBI's `Entrez <http://www.ncbi.nlm.nih.gov/gquery>`_, selecting genomes, we can construct the following query:
+We could of course do this by hand.  Via the web, we could go to NCBI's [Entrez](http://www.ncbi.nlm.nih.gov/gquery), selecting genomes, we can construct the following query:
 
-http://www.ncbi.nlm.nih.gov/genome?term=Serpentes[Organism]    `(link) http://www.ncbi.nlm.nih.gov/genome?term=Serpentes[Organism]>`_
+    http://www.ncbi.nlm.nih.gov/genome?term=Serpentes[Organism]    
 
-By FTP, we could go to NCBI's `FTP site <ftp://ftp.ncbi.nlm.nih.gov/refseq/>`_, find each genome, and download it manually 
+[link](http://www.ncbi.nlm.nih.gov/genome?term=Serpentes[Organism])
+
+By FTP, we could go to NCBI's [FTP site](ftp://ftp.ncbi.nlm.nih.gov/refseq/), find each genome, and download it manually 
 
 We will show you how to find and download the genoems with the NCBI Web Services API.
 
-What is an API and how does it relate to NCBI?
-----------------------------------------------
+### What is an API and how does it relate to NCBI?
 
-API stands for *application programming interface*; you can consult `stackoverflow <http://stackoverflow.com/questions/7440379/what-exactly-is-the-meaning-of-an-api>`_ and `wikipedia <https://en.wikipedia.org/wiki/Application_programming_interface>`_ for definitions, which include "an interface through which you access someone else's code or through which someone else's code accesses yours -- in effect the public methods and properties."
+API stands for *application programming interface*; you can consult [stackoverflow](http://stackoverflow.com/questions/7440379/what-exactly-is-the-meaning-of-an-api) and [wikipedia](https://en.wikipedia.org/wiki/Application_programming_interface) for definitions, which include "an interface through which you access someone else's code or through which someone else's code accesses yours -- in effect the public methods and properties."
 
 The NCBI toolkit is called *Entrez Programming Utilities* or *eutils* for short.  It is described at length in a series of e-books 
-`Entrez Programming Utilities Help <http://www.ncbi.nlm.nih.gov/books/NBK25501/>`_, `E-utilities Quick Start <http://www.ncbi.nlm.nih.gov/books/NBK25500/>`_, and `The E-utilities in-depth: parameters, syntax, and more <http://www.ncbi.nlm.nih.gov/books/NBK25499/>`_. 
+[Entrez Programming Utilities Help](http://www.ncbi.nlm.nih.gov/books/NBK25501/), [E-utilities Quick Start](http://www.ncbi.nlm.nih.gov/books/NBK25500/), and [The E-utilities in-depth: parameters, syntax, and more](http://www.ncbi.nlm.nih.gov/books/NBK25499/). 
 
-To do this, you're going to be using one tool in *eutils*, called *efetch*.  There is a whole chapter devoted to `efetch <http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch>`_ -- When Adina first started doing this kind of work, this documentation always broke her heart.   From detailed, highly funcitonal documentation it is very difficult to learn what the API can do.  It seems that a handful of examples explain much better than volumes of documentation. 
+To do this, you're going to be using one tool in *eutils*, called *efetch*.  There is a whole chapter devoted to [efetch](http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch) -- When Adina first started doing this kind of work, this documentation always broke her heart.   From detailed, highly funcitonal documentation it is very difficult to learn what the API can do.  It seems that a handful of examples explain much better than volumes of documentation. 
 
 The NCBI functionality is provided by these methods:
-* *search engine*,   (esearch)
-* *lists of search results*,  (esummary)
-* *data downloads*  (efetch)
-* *related records in other databases* (elinks)
+
+#. *search engine*,   (esearch)
+#. *lists of search results*,  (esummary)
+#. *data downloads*  (efetch)
+#. *related records in other databases* (elinks)
 
 And these methods can be accessed by placing http GET requests to NCBI's eutils server.  You send a carefully crafted URL, and NCBI sends you back data.
 
@@ -55,7 +54,7 @@ with unusual GC content) in fasta format::
 
     http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP001226.1&rettype=fasta
 
-Take a look at it.  You can see the genbank formatted genome `here <http://www.ncbi.nlm.nih.gov/nuccore/CP001226.1>`_.
+Take a look at it.  You can see the genbank formatted genome [here](http://www.ncbi.nlm.nih.gov/nuccore/CP001226.1).
 
 Other data formats of the same data are availabile.  The following URL will give you a genbank file::
 
@@ -63,15 +62,17 @@ Other data formats of the same data are availabile.  The following URL will give
 
 Do you notice the difference in these two commands?  Let's breakdown the command here:
 
-#.  <http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?>  This is is the name of the server and the path to the API script on the server.  Efetch, esummary, esearch are different API scripts here.
-#.  <db=nuccore>  This command tells the NCBI API which database to search.  Other databases that the NCBI has available can be found `here <http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly>`_. 
-#.  <id=CP000962>  This fields specifies the ID of the genome you want.
-#.  <rettype=gb>  This field specifies the format of data to be returned.  You'll note that this changed between the two URLs above.  In the first, we asked for only the FASTA sequence, while in the second, we asked for the Genbank file.  What you can put here depends on which database you use, and the documentation is elusive but useful: `valid alues of retmode and rettype<http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly>`_.  
+#.  `http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?`  This is is the name of the server and the path to the API script on the server.  Efetch, esummary, esearch are different API scripts here.
+#.  `db=nuccore`  This command tells the NCBI API which database to search.  Other databases that the NCBI has available can be found [here](http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly)
+#.  `id=CP000962`  This fields specifies the ID of the genome you want.
+#.  `rettype=gb`  This field specifies the format of data to be returned.  You'll note that this changed between the two URLs above.  In the first, we asked for only the FASTA sequence, while in the second, we asked for the Genbank file.  What you can put here depends on which database you use, and the documentation is elusive but useful: 
 
-NCBI's database objects can be updated, and when they are, the version number is incremented: see the discussion `here <http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/Format/exercises/qa_accession_vs_gi.html>`_.  Specifiying the version number of the sequence can assure repeatability if osbselescence.
+    valid alues of retmode and rettype(http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly)
 
-`Table of retmode and rettype fields <http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly>`_
-`Table of NCBI database ids <http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly>`_
+NCBI's database objects can be updated, and when they are, the version number is incremented: see the discussion [here](http://www.ncbi.nlm.nih.gov/Class/MLACourse/Modules/Format/exercises/qa_accession_vs_gi.html).  Specifiying the version number of the sequence can assure repeatability if osbselescence.
+
+[Table of retmode and rettype fields](http://www.ncbi.nlm.nih.gov/books/NBK25499/table/chapter4.T._valid_values_of__retmode_and/?report=objectonly)
+[Table of NCBI database ids](http://www.ncbi.nlm.nih.gov/books/NBK25497/table/chapter2.T._entrez_unique_identifiers_ui/?report=objectonly)
 
 
 .. Note:: 
@@ -83,18 +84,20 @@ Knowing that we can get anything that NCBI has to offer from carefully construct
 Since different databases and different API scripts have very different types of response, I'm going to suggest using python to fetch and process the
 results.
 
-Automating with an API
-----------------------
+### Automating with an API
 
 So, to get all the snake genomes, I first need a list of all the snake genomes.  
 I first construct a query on NCBI's website
-http://www.ncbi.nlm.nih.gov/genome/?term=Serpentes
+
+    http://www.ncbi.nlm.nih.gov/genome/?term=Serpentes
+
 And translate this into an ESEARCH URL
-http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=Serpentes
+
+    http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=Serpentes
 
 So first, I need to make HTTP requests in python.  
 
-I'll use the `requests <http://www.python-requests.org/en/latest/>`_ library instead of the built-in urllib2 because it requires fewer steps (once you 
+I'll use the [requests](http://www.python-requests.org/en/latest/) library instead of the built-in urllib2 because it requires fewer steps (once you 
 get it installed, cough, cough).   To install python-requests on the EC2 node run ::
 
     sudo apt-get install python-pip
@@ -115,25 +118,27 @@ i
 
 I follow this link in my browser and.. oh.  The response is in XML.  Ok.  Let's cope with XML.
 
-Chrome and Firefox seem to show XML ok by default, but Safari does not.  (To get Safari to render XML follow `these instrucitons <http://arstechnica.com/civis/viewtopic.php?f=19&t=118896>`_  or just use firefox or chrome.)
+Chrome and Firefox seem to show XML ok by default, but Safari does not.  (To get Safari to render XML follow [these instrucitons](http://arstechnica.com/civis/viewtopic.php?f=19&t=118896)  or just use firefox or chrome.)
 
 So examining the XML tree, we a list called IdList with tags Id that contain five digit numbers.
-<eSearchResult>
-<Count>5</Count>
-<RetMax>5</RetMax>
-<RetStart>0</RetStart>
-<IdList>
-<Id>32656</Id>
-<Id>17893</Id>
-<Id>16688</Id>
-<Id>14467</Id>
-<Id>10842</Id>
-</IdList>
+	
+    <eSearchResult>
+    <Count>5</Count>
+    <RetMax>5</RetMax>
+    <RetStart>0</RetStart>
+    <IdList>
+    <Id>32656</Id>
+    <Id>17893</Id>
+    <Id>16688</Id>
+    <Id>14467</Id>
+    <Id>10842</Id>
+    </IdList>
+
 These five digit numbers are identifier numbers specific to the nuccore database, and we care about them only until we get our data, then we can forget about them.
 
 What's the fastest way to get the Id tags out of this list?
 
-Well, we search the Python documentation for how to parse XML:  `XML Processing modules <https://docs.python.org/2/library/xml.html>`_
+Well, we search the Python documentation for how to parse XML:  [XML Processing modules](https://docs.python.org/2/library/xml.html)
 
 There are several options; the first one is ElementTree, and it is sufficient for our purposes.
 
@@ -171,66 +176,74 @@ or with a list comprehension::
 At this point idlist is a list of strings that reflect the nuccore ids of the sequences we want.  
 
 To turn these id numbers into something useful, we need ESUMMARY.  The following URL gives us the sequence name, the organism name, and some human-readable accession numbers for a nuccore id number 17893::
-   http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=17893
+
+    http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=17893
 
 NCBI, aware that people don't usually want only one summary at a time, lets us query all of them at once:
 
     summary = requests.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=32656,17893,16688,14467,10842")
 
 So we can build the summary url from the idlist using ",".join():
+
      print "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=" + ",".join(idlist) 
 
 And get it from NCBI
+
      summary = requests.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=" + ",".join(idlist)) 
 
-Let us examine this in our browser::
+
+Let us examine this in our browser:
+
     http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=nuccore&id=32656,17893,16688,14467,10842
 
 There is valuable data in there, but it's tied up in XML.    We can get it out.
 
-<eSummaryResult>
-<ERROR>Otherdb uid="16688" db="nucest" term="16688"</ERROR>
-/<DocSum>
-<Id>32656</Id>
-<Item Name="Caption" Type="String">X02955</Item>
-<Item Name="Title" Type="String">Human interferon alpha gene IFN-alpha 4b</Item>
-<Item Name="Extra" Type="String">gi|32656|emb|X02955.1|[32656]</Item>
-<Item Name="Gi" Type="Integer">32656</Item>
-<Item Name="CreateDate" Type="String">1986/01/28</Item>
-<Item Name="UpdateDate" Type="String">2005/04/18</Item>
-<Item Name="Flags" Type="Integer">0</Item>
-<Item Name="TaxId" Type="Integer">9606</Item>
-<Item Name="Length" Type="Integer">2022</Item>
-<Item Name="Status" Type="String">live</Item>
-<Item Name="ReplacedBy" Type="String"/>
-<Item Name="Comment" Type="String">  </Item>
-</DocSum>
-<DocSum>
-<Id>17893</Id>
-<Item Name="Caption" Type="String">X55275</Item>
-<Item Name="Title" Type="String">B.oleracea SLG-13 gene for S-locus glycoprotein</Item>
-<Item Name="Extra" Type="String">gi|17893|emb|X55275.1|[17893]</Item>
+    <eSummaryResult>
+    <ERROR>Otherdb uid="16688" db="nucest" term="16688"</ERROR>
+    /<DocSum>
+    <Id>32656</Id>
+    <Item Name="Caption" Type="String">X02955</Item>
+    <Item Name="Title" Type="String">Human interferon alpha gene IFN-alpha 4b</Item>
+    <Item Name="Extra" Type="String">gi|32656|emb|X02955.1|[32656]</Item>
+    <Item Name="Gi" Type="Integer">32656</Item>
+    <Item Name="CreateDate" Type="String">1986/01/28</Item>
+    <Item Name="UpdateDate" Type="String">2005/04/18</Item>
+    <Item Name="Flags" Type="Integer">0</Item>
+    <Item Name="TaxId" Type="Integer">9606</Item>
+    <Item Name="Length" Type="Integer">2022</Item>
+    <Item Name="Status" Type="String">live</Item>
+    <Item Name="ReplacedBy" Type="String"/>
+    <Item Name="Comment" Type="String">  </Item>
+    </DocSum>
+    <DocSum>
+    <Id>17893</Id>
+    <Item Name="Caption" Type="String">X55275</Item>
+    <Item Name="Title" Type="String">B.oleracea SLG-13 gene for S-locus glycoprotein</Item>
+    <Item Name="Extra" Type="String">gi|17893|emb|X55275.1|[17893]</Item>
 
 Look at the structure of the data.  There are DocSum tags that contain an Id tag and a bunch of Item tags.  
 The text of the item tags has the data and the attributes of the item tags have the field names.
 
 So to go at this we want to iterate through the DocSums, then for each DocSum iterate through all the item tags.
 
-First, parse the summary XML with ET::
+First, parse the summary XML with ET:
+
      sumroot = ET.fromstring(summary.text)
 
-Now iterate over the DocSum elements::
+Now iterate over the DocSum elements:
+
     for docsum in sumroot.iter("DocSum"):
          print docsum
 
 This iterates over five Docsum elements, so far so good.
 
-So now docsum is defined -- as the last docsum in the XML--so I can try iterating over its Item tags::
+So now docsum is defined -- as the last docsum in the XML--so I can try iterating over its Item tags:
+
     for item in docsum.iter("Item"):
          print item.tag, item.attrib, item.text
 
 This shows us what we saw in the browser--the field names are in the Name element of the attributes and the data is in the .text attribute.
-Let us turn this into a dict::
+Let us turn this into a dict:
 
    itemhash = {}
    for item in docsum.iter("Item"):
@@ -267,10 +280,9 @@ keylist just using the fields that were in the last docsum.
 Now we have accession numbers, time to download the datasets.
 
 
-Comment on Genbank files
-------------------------
+##Comment on Genbank files
 
-Genbank files have a special structure to them.  You can look at it and figure it out for the most part, or read about it in detail `here <http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html>`_.  To find out if your downloaded Genbank files contain 16S rRNA genes, I like to run the following command::
+Genbank files have a special structure to them.  You can look at it and figure it out for the most part, or read about it in detail [here](http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html).  To find out if your downloaded Genbank files contain 16S rRNA genes, I like to run the following command::
 
     grep 16S *gbk
 
@@ -291,7 +303,7 @@ First, we'll have to install BioPython on your instance and they've made that pr
     sudo apt-get update
     sudo apt-get install python-biopython
 
-Fan Yang (Iowa State University) and I wrote a script to extract 16S rRNA sequences from Genbank files, `here <https://github.com/adina/scripts-for-ngs/blob/master/parse-genbank.py>`_.  It basically searches for text strings in the Genbank structure that is appropriate for these particular genes.  You can read more about BioPython `here <http://biopython.org/DIST/docs/tutorial/Tutorial.html>`_ and its Genbank parser `here <http://biopython.org/DIST/docs/api/Bio.GenBank-module.html>`_.  In this script, we are looking for an "rRNA" feature and looking for specific text in its "/product" line.  If this is true, we go through the genome sequence and extract the coordinates of these genes, providing the specific gene sequence.
+Fan Yang (Iowa State University) and I wrote a script to extract 16S rRNA sequences from Genbank files, [here](https://github.com/adina/scripts-for-ngs/blob/master/parse-genbank.py).  It basically searches for text strings in the Genbank structure that is appropriate for these particular genes.  You can read more about BioPython [here](http://biopython.org/DIST/docs/tutorial/Tutorial.html) and its Genbank parser [here](http://biopython.org/DIST/docs/api/Bio.GenBank-module.html).  In this script, we are looking for an "rRNA" feature and looking for specific text in its "/product" line.  If this is true, we go through the genome sequence and extract the coordinates of these genes, providing the specific gene sequence.
 
 To run this script on the Genbank file for CP000962.  Note make sure you are in the right directory for both the program and the files::
 
