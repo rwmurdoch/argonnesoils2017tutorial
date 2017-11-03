@@ -1,25 +1,19 @@
-- What is Cloud Computing and why is it useful?
+
+# Shell lesson
+[Edamame shell lesson](2015-06-22-introduction_to_the_shell.md)
+
+# Amazon EC2  -- servers for rent
+- [What is Cloud Computing and why is it useful?](https://2014-argonne-soils-automation-workshop.readthedocs.io/en/latest/_static/argonne-cloud-computing.pptx.pdf)
 
 - [Getting started with Amazon EC2](http://angus.readthedocs.io/en/2015/amazon/index.html)
 
-Once you're logged on to the EC2 instance, use the commands
-
-mkdir tutorial  
-cd tutorial  
-mkdir data  
-cd data  
-curl -L https://www.dropbox.com/sh/w88b739sr171888/AAB00S4615cM689T9kco6ylLa?dl=1 > download.zip  
-unzip download.zip
-
-- [Using the command line](https://github.com/edamame-course/2015-tutorials/blob/master/final/2015-06-22-introduction_to_the_shell.md)
-
-To get the 16S data use the commands
-
-cd  
-cd tutorial  
-wget https://s3.amazonaws.com/edamame/EDAMAME_16S.tar.gz  
-tar xvfz EDAMAME_16S.tar.gz
-
-
+# More resources
+* [Argonne soils automation workshop 2014](https://2014-argonne-soils-automation-workshop.readthedocs.io/en/latest/) This workshop had a more expansive day-and-a-half workshop in 2014.
+* [Software Carpentry reference page] (http://swcarpentry.github.io/shell-novice/reference.html)
+* Software Carpentry tutorial - [The Unix shell](http://software-carpentry.org/v4/shell/index.html)
+* The shell handout - [Command Reference](http://files.fosswire.com/2007/08/fwunixref.pdf)
+* [explainshell.com](http://explainshell.com)
+* [Intro to Bash Programming](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html)
+* man bash
 
 
